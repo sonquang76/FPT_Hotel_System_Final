@@ -1,0 +1,229 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.RoomTypeManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Room Type Management"
+        Height="750" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#1E2030"
+        FontFamily="Segoe UI, Helvetica, Arial, sans-serif">
+    <Window.Resources>
+        <!-- Style Nhãn (Label) -->
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <!-- Style TextBox Tĩnh -->
+        <Style TargetType="TextBox" x:Key="ModernTextBox">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Background" Value="#1E2030"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Nút Tĩnh Primary -->
+        <Style TargetType="Button" x:Key="ModernButton">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Thêm Style Button Ghost cho nút Back -->
+        <Style TargetType="Button" x:Key="GhostButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- DataGrid Styles Tĩnh (Dark Theme) -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#25283D"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="RowBackground" Value="#25283D"/>
+            <Setter Property="AlternatingRowBackground" Value="#2A2D45"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#353A56"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="RowHeight" Value="45"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#1E2030"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderThickness="0">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Nút Action Cập Nhật/Xóa -->
+        <Style TargetType="Button" x:Key="ActionButtonStyle">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Control Panel -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. HEADER TITLE (Đã thêm nút Back) -->
+        <Grid Grid.Row="0" Margin="30,25,30,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Nút BACK -->
+            <Button x:Name="btnBack" Grid.Column="0" Content="&#x2190; BACK" Style="{StaticResource GhostButton}" Width="100" Height="45" Margin="0,0,20,0" Click="btnBack_Click" VerticalAlignment="Top"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Border Width="45" Height="45" Background="#2ECC71" CornerRadius="8" Margin="0,0,15,0">
+                    <TextBlock Text="🏷️" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="ROOM TYPE MANAGEMENT" FontSize="26" FontWeight="Black" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- 2. CONTROL PANEL (Gồm TextBox Floor và Nút Thêm) -->
+        <Border Grid.Row="1" Background="#25283D" CornerRadius="12" Margin="30,10,30,20" Padding="25">
+            <Border.Effect>
+                <DropShadowEffect Color="#0A0B12" BlurRadius="20" Opacity="0.4" ShadowDepth="5" Direction="270"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <!-- Vùng Lọc -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Nút Thêm -->
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="TYPE:" Style="{StaticResource LabelStyle}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBox x:Name="txtType" Style="{StaticResource ModernTextBox}" Width="200"/>
+                    <Button x:Name="btnSearch" Grid.Column="0" Content="SEARCH TYPE" Margin="40,0,0,0"
+                            Style="{StaticResource ModernButton}" Background="#2ECC71" Width="170"
+                            Click="btnSearch_Click"/>
+                </StackPanel>
+
+                <Button x:Name="btnAdd" Grid.Column="1" Content="+ ADD ROOM TYPE" 
+                        Style="{StaticResource ModernButton}" Background="#2ECC71" Width="170"
+                        Click="btnAdd_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- 3. DATA GRID -->
+        <Border Grid.Row="2" Background="#25283D" CornerRadius="12" Margin="30,0,30,30" Padding="15">
+            <DataGrid x:Name="dgRoomType"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      BorderThickness="0"
+                      Background="Transparent">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Width="80" Binding="{Binding RoomTypeId}"/>
+                    <DataGridTextColumn Header="Type Name" Width="260" Binding="{Binding TypeName}"/>
+                    <DataGridTextColumn Header="Base Price" Width="180" Binding="{Binding BasePrice, StringFormat={}{0:N0}}"/>
+                    <DataGridTextColumn Header="Capacity" Width="120" Binding="{Binding Capacity}"/>
+                    <!-- Cột Action -->
+                    <DataGridTemplateColumn Header="Action" Width="200">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="Update" 
+                                            Style="{StaticResource ActionButtonStyle}" 
+                                            Background="#3498DB" 
+                                            Click="btnUpdate_Click"/>
+
+                                    <Button Content="Delete" 
+                                            Style="{StaticResource ActionButtonStyle}" 
+                                            Background="#E74C3C" 
+                                            Click="btnDelete_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</Window>

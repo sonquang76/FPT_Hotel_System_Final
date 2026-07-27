@@ -1,0 +1,468 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.RoomReservationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_FPT_ManagementHotel"
+        mc:Ignorable="d"
+        Title="Room Reservation"
+        Height="650"
+        Width="1300"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        Background="#1E2030">
+
+    <Window.Resources>
+        <!-- Style cho các nút điều hướng Sidebar bên trái -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="20,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2F334D"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#444A73"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style đã đặt tên (x:Key) để tránh xung đột với các thành phần của DatePicker -->
+        <Style x:Key="ModernTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="#2F334D"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="ModernDatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Background" Value="#1E2030"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Đã sửa TargetType thành Button -->
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="8">
+                            <!-- Đã sửa thành ContentPresenter cho Button -->
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- TextBox Tĩnh cho các trường Chỉ Đọc (ReadOnly) -->
+        <Style TargetType="TextBox" x:Key="ReadOnlyTextBox" BasedOn="{StaticResource ModernTextBoxStyle}">
+            <Setter Property="Background" Value="#1A1C29"/>
+            <Setter Property="Foreground" Value="#7F8C8D"/>
+            <Setter Property="BorderBrush" Value="#2A2D45"/>
+        </Style>
+        <!-- Style Button Primary Tĩnh -->
+        <Style TargetType="Button" x:Key="ModernButton">
+            <Setter Property="Background" Value="#2ECC71"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Button Ghost (Cancel/Back) Tĩnh -->
+        <Style TargetType="Button" x:Key="GhostButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Button Lọc Trạng Thái (Status Buttons) -->
+        <Style TargetType="Button" x:Key="StatusButton">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- ListBoxItem Style tĩnh (Khi click chọn thẻ phòng) -->
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="12" Margin="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <!-- Thêm viền xanh lá mỏng khi phòng đang được chọn -->
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#2ECC71"/>
+                                <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--================ LEFT SIDEBAR (Đồng bộ với các cửa sổ khác) ================-->
+        <Border Grid.Column="0" Background="#25283D" BorderBrush="#444A73" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Margin="20,30,20,30" HorizontalAlignment="Center">
+                    <TextBlock Text="FPT HOTEL" FontSize="24" FontWeight="Black" Foreground="White" />
+                    <TextBlock Text="Management System" FontSize="11" Foreground="#A0A5C1" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="10,0">
+                    <Button Content="Reservations" Style="{StaticResource MenuButtonStyle}" Click="BtnReservations_Click"/>
+                    <Button Content="Room Reservation" Style="{StaticResource MenuButtonStyle}" Tag="Active"/>
+                    <Button Content="Services &amp; Bills" Style="{StaticResource MenuButtonStyle}" Click="BtnService_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--================ RIGHT CONTENT AREA ================-->
+        <Grid Grid.Column="1" Margin="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="572*"/>
+                <ColumnDefinition Width="230*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Header Panel -->
+            <Border Grid.ColumnSpan="2"
+                    Background="#25283D"
+                    BorderBrush="#444A73"
+                    BorderThickness="1"
+                    CornerRadius="12"
+                    Padding="15,10"
+                    Margin="0,0,0,15">
+                <DockPanel LastChildFill="True">
+                    <StackPanel Orientation="Horizontal"
+                                DockPanel.Dock="Right"
+                                VerticalAlignment="Center">
+                        <Button x:Name="btnRefresh" Width="110" Height="36" Content="Refresh" Click="btnRefresh_Click" Style="{StaticResource ModernButtonStyle}"/>
+                        <Button x:Name="btnLogout" Width="110" Height="36" Background="#E74C3C" Content="Logout" Click="btnLogout_Click" Style="{StaticResource ModernButtonStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="ROOM RESERVATION" FontSize="24" FontWeight="Bold" Foreground="White" Height="30"/>
+                        <TextBlock Text="Receptionist Booking Management" Margin="0,2,0,0" Foreground="#A0A5C1" FontSize="13"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- Left Column: Room Board -->
+            <Border Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" Background="#25283D" BorderBrush="#444A73" BorderThickness="1" CornerRadius="12" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" Margin="0,0,0,10">
+                        <TextBlock Text="Room Status Board" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock DockPanel.Dock="Right" Foreground="#A0A5C1" FontSize="13" Text="Use the filter below to find available rooms according to the exact schedule" Width="907" Height="19"/>
+                    </DockPanel>
+
+                    <Border Grid.Row="1" Background="#1A1C2C" BorderBrush="#444A73" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,5,0,15">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1.3*"/>
+                                    <ColumnDefinition Width="1.3*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Margin="5,0">
+                                    <TextBlock Text="Find Room Number:" FontSize="12" FontWeight="SemiBold" Foreground="#A0A5C1"/>
+                                    <TextBox x:Name="txtSearchRoomNumber" Height="34" Margin="0,4,0,0" Padding="8,4" TextChanged="txtSearchRoomNumber_TextChanged" Style="{StaticResource ModernTextBoxStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Margin="5,0">
+                                    <TextBlock Text="Select Floor:" FontSize="12" FontWeight="SemiBold" Foreground="#A0A5C1"/>
+                                    <ComboBox x:Name="cbFilterFloor" Height="34" Margin="0,4,0,0" Padding="5,2" SelectionChanged="cbFilterFloor_SelectionChanged" Style="{StaticResource ModernComboBoxStyle}">
+                                        <ComboBoxItem Content="-- All Floors --" IsSelected="True"/>
+                                        <ComboBoxItem Content="1st Floor"/>
+                                        <ComboBoxItem Content="2nd Floor"/>
+                                        <ComboBoxItem Content="3rd Floor"/>
+                                        <ComboBoxItem Content="4th Floor"/>
+                                        <ComboBoxItem Content="5th Floor"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" Margin="5,0">
+                                    <TextBlock Text="Filter from date (Check-in):" FontSize="12" FontWeight="SemiBold" Foreground="#A0A5C1"/>
+                                    <DatePicker x:Name="dpFilterStartDate" Height="34" Margin="0,4,0,0" SelectedDateChanged="dpFilterDate_SelectedDateChanged" Style="{StaticResource ModernDatePickerStyle}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" Margin="5,0">
+                                    <TextBlock Text="To date (Check-out):" FontSize="12" FontWeight="SemiBold" Foreground="#A0A5C1"/>
+                                    <DatePicker x:Name="dpFilterEndDate" Height="34" Margin="0,4,0,0" SelectedDateChanged="dpFilterDate_SelectedDateChanged" Style="{StaticResource ModernDatePickerStyle}"/>
+                                </StackPanel>
+
+                                <Button x:Name="btnResetFilters" Grid.Column="4" Content="Cancel filter" Background="#7F8C8D" Height="34" Width="95" Margin="5,18,5,0" FontSize="12" Click="btnResetFilters_Click" Style="{StaticResource ModernButtonStyle}"/>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal" Margin="5,12,5,0" VerticalAlignment="Center">
+                                <TextBlock Text="Status Room:" FontSize="12" FontWeight="SemiBold" Foreground="#A0A5C1" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <Button x:Name="btnFilterAll" Content="All" Width="80" Height="30" FontSize="12" Background="#444A73" Margin="0,0,5,0" Click="btnFilterStatus_Click" Tag="All" Style="{StaticResource ModernButtonStyle}"/>
+                                <Button x:Name="btnFilterAvailable" Content="Available" Width="90" Height="30" FontSize="12" Background="#10B981" Margin="5,0" Click="btnFilterStatus_Click" Tag="Available" Style="{StaticResource ModernButtonStyle}"/>
+                                <Button x:Name="btnFilterOccupied" Content="Occupied" Width="110" Height="30" FontSize="12" Background="#EF4444" Margin="5,0" Click="btnFilterStatus_Click" Tag="Occupied" Style="{StaticResource ModernButtonStyle}"/>
+                                <Button x:Name="btnFilterMaintenance" Content="Maintenance" Width="100" Height="30" FontSize="12" Background="#6B7280" Margin="5,0" Click="btnFilterStatus_Click" Tag="Maintenance" Style="{StaticResource ModernButtonStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ListBox -->
+                    <ListBox x:Name="lbRooms" Grid.Row="2" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="lbRooms_SelectionChanged">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="220" Height="190" Margin="8" CornerRadius="10" BorderBrush="#444A73" BorderThickness="1">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#10B981"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Room.Status}" Value="Occupied">
+                                                    <Setter Property="Background" Value="#EF4444"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Room.Status}" Value="Reserved">
+                                                    <Setter Property="Background" Value="#F59E0B"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Room.Status}" Value="Maintenance">
+                                                    <Setter Property="Background" Value="#6B7280"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Grid Margin="12">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Text="{Binding Room.RoomNumber}" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                                        <TextBlock Grid.Row="1" Margin="0,2,0,0" Text="{Binding Room.RoomType.TypeName}" FontWeight="SemiBold" Foreground="White" Opacity="0.9"/>
+
+                                        <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                                            <TextBlock Foreground="White" FontSize="13" Text="{Binding Room.RoomType.Capacity, StringFormat=Capacity: {0} guests}"/>
+                                            <TextBlock Margin="0,2,0,0" Foreground="White" FontSize="13" FontWeight="SemiBold" Text="{Binding Room.RoomType.BasePrice, StringFormat=Price: \{0:N0\} VND}"/>
+                                        </StackPanel>
+
+                                        <Grid Grid.Row="3">
+                                            <!-- 1. Nút BOOK ROOM (Chỉ hiện khi phòng Available) -->
+                                            <Button Content="BOOK ROOM" Background="#065F46" Height="32" FontSize="12" Click="btnBookRoom_Click" Foreground="White" FontWeight="Bold">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Room.Status}" Value="Available">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+
+                                            <!-- 2. Thẻ OCCUPIED (Chỉ hiện khi phòng Occupied) -->
+                                            <Border Background="#FEE2E2" CornerRadius="4" Height="32">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Room.Status}" Value="Occupied">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="OCCUPIED" Foreground="#EF4444" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- 3. Thẻ MAINTENANCE (Chỉ hiện khi phòng Maintenance) -->
+                                            <Border Background="#F3F4F6" CornerRadius="4" Height="32">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Room.Status}" Value="Maintenance">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="MAINTENANCE" Foreground="#6B7280" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- 4. Thẻ RESERVED (Chỉ hiện khi phòng Reserved) -->
+                                            <Border Background="#FEF3C7" CornerRadius="4" Height="32">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Room.Status}" Value="Reserved">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="RESERVED" Foreground="#F59E0B" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Right Column: Sidebar Form -->
+            <Border Grid.Row="1" Grid.Column="1" Background="#25283D" BorderBrush="#444A73" BorderThickness="1" CornerRadius="12" Padding="15">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="0,0,10,0">
+                        <TextBlock Text="ROOM INFORMATION" FontSize="18" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                        <TextBlock Text="Room Number" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtRoomNumber" IsReadOnly="True" Background="#1A1C2C" BorderBrush="#2F334D" Foreground="White" Text="{Binding Room.RoomNumber, Mode=OneWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Room Type" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtRoomType" IsReadOnly="True" Background="#1A1C2C" BorderBrush="#2F334D" Foreground="White" Text="{Binding Room.RoomType.TypeName, Mode=OneWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Capacity" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtCapacity" IsReadOnly="True" Background="#1A1C2C" BorderBrush="#2F334D" Foreground="White" Text="{Binding Room.RoomType.Capacity, Mode=OneWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Price" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtPrice" IsReadOnly="True" Background="#1A1C2C" BorderBrush="#2F334D" Foreground="White" Text="{Binding Room.RoomType.BasePrice, Mode=OneWay, StringFormat={}{0:N0} VND}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Status" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtStatus" IsReadOnly="True" Background="#1A1C2C" BorderBrush="#2F334D" Foreground="White" Text="{Binding Room.Status, Mode=OneWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+
+                        <Separator Margin="0,15" Background="#444A73"/>
+                        <TextBlock Text="CUSTOMER INFORMATION" FontSize="18" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                        <TextBlock Text="Customer Name" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtCustomerName" Text="{Binding Customer.CustomerName, Mode=TwoWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Phone" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtPhone" Text="{Binding Customer.Phone, Mode=TwoWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Email" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtEmail" Text="{Binding Customer.Email, Mode=TwoWay}" Style="{StaticResource ModernTextBoxStyle}"/>
+                        <TextBlock Text="Citizen ID / Passport" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtCitizenID" Style="{StaticResource ModernTextBoxStyle}"/>
+
+                        <Separator Margin="0,15" Background="#444A73"/>
+                        <TextBlock Text="RESERVATION DETAILS" FontSize="18" FontWeight="Bold" Foreground="#38BDF8" Margin="0,0,0,10"/>
+                        <TextBlock Text="Check In Date" FontSize="13" Foreground="#A0A5C1"/>
+                        <DatePicker x:Name="dpBookingCheckIn" SelectedDate="{Binding CheckInDate, Mode=TwoWay}" Style="{StaticResource ModernDatePickerStyle}"/>
+                        <TextBlock Text="Check Out Date" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <DatePicker x:Name="dpBookingCheckOut" SelectedDate="{Binding CheckOutDate, Mode=TwoWay}" Style="{StaticResource ModernDatePickerStyle}"/>
+                        <TextBlock Text="Guest(s)" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <ComboBox x:Name="cbBookingGuest" SelectedValuePath="Content" Style="{StaticResource ModernComboBoxStyle}">
+                            <ComboBoxItem Content="1"/>
+                            <ComboBoxItem Content="2"/>
+                            <ComboBoxItem Content="3"/>
+                            <ComboBoxItem Content="4"/>
+                            <ComboBoxItem Content="5"/>
+                        </ComboBox>
+                        <TextBlock Text="Note" Margin="0,8,0,0" FontSize="13" Foreground="#A0A5C1"/>
+                        <TextBox x:Name="txtNote" Height="70" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Style="{StaticResource ModernTextBoxStyle}"/>
+
+                        <Separator Margin="0,15" Background="#444A73"/>
+                        <Button x:Name="btnBookRoom" Background="#2ECC71" Content="BOOK ROOM" Height="45" Margin="0,5" Click="btnBookRoom_Click" Style="{StaticResource ModernButtonStyle}"/>
+                        <Button x:Name="btnClearForm" Background="#2F334D" Foreground="#A0A5C1" Content="CLEAR FORM" Height="45" Margin="0,5" Click="btnClearForm_Click" BorderBrush="#444A73" BorderThickness="1" Style="{StaticResource ModernButtonStyle}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

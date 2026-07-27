@@ -1,0 +1,472 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.ReceptionistWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_FPT_ManagementHotel"
+        mc:Ignorable="d"
+        Title="Receptionist Management Dashboard" Height="700" Width="1300" 
+        WindowStartupLocation="CenterScreen" Background="#1E2030">
+
+    <Window.Resources>
+        <!-- Style cho các nút điều hướng Sidebar bên trái -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="20,0,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2F334D"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="Tag" Value="Active">
+                    <Setter Property="Background" Value="#444A73"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--================ LEFT SIDEBAR ================-->
+        <Border Grid.Column="0" Background="#25283D" BorderBrush="#444A73" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="20,30,20,30" HorizontalAlignment="Center">
+                    <TextBlock Text="FPT HOTEL" FontSize="24" FontWeight="Black" Foreground="White" />
+                    <TextBlock Text="Management System" FontSize="11" Foreground="#A0A5C1" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="10,0">
+                    
+                    <Button Content="Reservations" Style="{StaticResource MenuButtonStyle}" Tag="Active"/>
+                    <Button Content="Room Reservation" Style="{StaticResource MenuButtonStyle}" Name="btnRoomReservation" Click="btnRoomReservation_Click"/>
+                    <Button Content="Services &amp; Bills" Style="{StaticResource MenuButtonStyle}" Name="btnService" Click="btnService_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!--================ RIGHT CONTENT AREA ================-->
+        <Grid Grid.Column="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 1. HEADER SECTION -->
+            <Grid Grid.Row="0" Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Thanh Gold Accent bên trái tiêu đề -->
+                    <Border Width="4" Height="36" Background="#F1C40F" CornerRadius="2" Margin="0,0,12,0"/>
+                    <StackPanel>
+                        <TextBlock Text="RECEPTIONIST DASHBOARD" FontSize="20" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Manage reservations and process actions directly within each row" FontSize="11" Foreground="#A0A5C1" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- btnRefresh -->
+                <Button x:Name="btnRefresh" Grid.Column="1" Click="BtnRefresh_Click" Content="Refresh List" Padding="15,0" Width="90" Height="38" Background="#2F334D" Foreground="#FFFFFF" BorderBrush="#444A73" BorderThickness="1" VerticalAlignment="Center" Margin="0,0,10,0" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#444A73"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- btnLogout -->
+                <Button x:Name="btnLogout" Grid.Column="2" Click="BtnLogout_Click" Content="Logout" Padding="18,0" Width="80" Height="38" Background="#E74C3C" Foreground="White" FontWeight="SemiBold" BorderThickness="0" VerticalAlignment="Center" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#C0392B"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+
+            <!-- 2. SEARCH & FILTER SECTION -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,15">
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#2F334D" BorderBrush="#444A73" BorderThickness="1,1,0,1" CornerRadius="6,0,0,6" Height="38">
+                            <TextBox x:Name="txtSearch" Background="Transparent" Foreground="#FFFFFF" BorderThickness="0" Padding="12,0" VerticalContentAlignment="Center" FontSize="13" Tag="Search reservations..."/>
+                        </Border>
+                        <Button x:Name="btnSearch" Grid.Column="1" Click="BtnSearch_Click" Width="50" Height="38" Background="#3498DB" BorderThickness="0" Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="0,6,6,0">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#2980B9"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Path Data="M 14,14 L 20,20 M 16,10 A 6,6 0 1,1 4,10 A 6,6 0 1,1 16,10 Z" Stroke="White" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Button>
+                    </Grid>
+
+                    <Grid Grid.Column="2">
+                        <!-- Cột dự phòng có cấu trúc như file cũ -->
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </Grid>
+
+                <!-- Bộ lọc Status (Checkboxes) -->
+                <StackPanel Orientation="Horizontal" Margin="5,5,0,5">
+                    <TextBlock Text="Filter Status:" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#A0A5C1" Margin="0,0,15,0"/>
+                    <CheckBox x:Name="chkConfirmed" Content="Confirmed" Foreground="#FFFFFF" IsChecked="False" Checked="FilterStatus_Changed" Unchecked="FilterStatus_Changed" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="chkCheckedOut" Content="CheckedOut" Foreground="#FFFFFF" IsChecked="False" Checked="FilterStatus_Changed" Unchecked="FilterStatus_Changed" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="chkCancelled" Content="Cancelled" Foreground="#FFFFFF" IsChecked="False" Checked="FilterStatus_Changed" Unchecked="FilterStatus_Changed" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 3. TABLE SECTION -->
+            <Border Grid.Row="2" Background="#25283D" CornerRadius="10" Padding="15" BorderBrush="#444A73" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Reservation List" FontSize="14" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="5,0,0,12"/>
+
+                    <DataGrid x:Name="dgBookings" Grid.Row="1" 
+                              AutoGenerateColumns="False" 
+                              CanUserAddRows="False" 
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              Background="Transparent" 
+                              BorderThickness="0" 
+                              GridLinesVisibility="Horizontal" 
+                              RowBackground="#2F334D"
+                              AlternatingRowBackground="#25283D"
+                              Foreground="#FFFFFF"
+                              BorderBrush="#444A73"
+                              HorizontalGridLinesBrush="#1E2030"
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#444A73"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="10,5"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <!-- Căn chỉnh độ rộng các cột tối ưu để không bị che khuất -->
+                            <DataGridTextColumn Header="Room" Binding="{Binding Room.RoomNumber}" Width="60" FontWeight="SemiBold"/>
+                            <DataGridTextColumn Header="Expected In" Binding="{Binding ExpectedCheckIn, StringFormat=\{0:dd/MM/yyyy\}}" Width="100"/>
+                            <DataGridTextColumn Header="Expected Out" Binding="{Binding ExpectedCheckOut, StringFormat=\{0:dd/MM/yyyy\}}" Width="100"/>
+                            <DataGridTextColumn Header="Check-In" Binding="{Binding CheckInDate, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="125"/>
+                            <DataGridTextColumn Header="Check-Out" Binding="{Binding CheckOutDate, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Width="125"/>
+
+                            <!-- Trạng thái Status -->
+                            <DataGridTemplateColumn Header="Status" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding BookingStatus}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="Text" Value="Confirmed">
+                                                            <Setter Property="Foreground" Value="#2ECC71"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Text" Value="CheckedIn">
+                                                            <Setter Property="Foreground" Value="#2980B9"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Text" Value="CheckedOut">
+                                                            <Setter Property="Foreground" Value="#7F8C8D"/>
+                                                        </Trigger>
+                                                        <Trigger Property="Text" Value="Cancelled">
+                                                            <Setter Property="Foreground" Value="#E74C3C"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTextColumn Header="Created By" Binding="{Binding CreatedByNavigation.FullName}" Width="110"/>
+
+                            <!-- ĐỔI WIDTH THÀNH CỐ ĐỊNH 220 ĐỂ HIỂN THỊ ĐỦ 6 NÚT HÀNH ĐỘNG -->
+                            <DataGridTemplateColumn Header="Actions" Width="220">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+
+                                            <StackPanel.Resources>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Width" Value="30"/>
+                                                    <Setter Property="Height" Value="26"/>
+                                                    <Setter Property="Margin" Value="0,0,4,0"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Setter Property="FontSize" Value="12"/>
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Cursor" Value="Hand"/>
+                                                </Style>
+                                            </StackPanel.Resources>
+
+                                            <!-- Confirm Button -->
+                                            <Button x:Name="btnRowConfirm" Click="BtnConfirm_Click" CommandParameter="{Binding}" Content="✓" ToolTip="Confirm Reservation">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Background" Value="#2ECC71"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Confirmed">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedIn">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedOut">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Cancelled">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <!-- Check Out Button -->
+                                            <Button x:Name="btnRowCheckOut" Click="BtnCheckOut_Click" CommandParameter="{Binding}" Content="→" ToolTip="Check Out">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Background" Value="#E67E22"/>
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                        <Setter Property="Opacity" Value="0.3"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Confirmed">
+                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                <Setter Property="Opacity" Value="1.0"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedIn">
+                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                <Setter Property="Opacity" Value="1.0"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <!-- Extend Button -->
+                                            <Button x:Name="btnRowExtend" Click="BtnExtend_Click" CommandParameter="{Binding}" Content="+" Foreground="#FFFFFF" ToolTip="Extend Stay">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Background" Value="#F1C40F"/>
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                        <Setter Property="Opacity" Value="0.3"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Confirmed">
+                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                <Setter Property="Opacity" Value="1.0"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedIn">
+                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                <Setter Property="Opacity" Value="1.0"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <!-- Update Button -->
+                                            <Button x:Name="btnRowUpdate" Click="BtnUpdate_Click" CommandParameter="{Binding}" Content="✎" ToolTip="Update Info">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Background" Value="#3498DB"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedOut">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.3"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Cancelled">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.3"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                            <!-- Services Button -->
+                                            <Button x:Name="btnRowService" Click="BtnRowService_Click" CommandParameter="{Binding}" Content="⚙" ToolTip="Room Services">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Background" Value="#9B59B6"/>
+                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                        <Setter Property="Opacity" Value="0.3"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Confirmed">
+                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                <Setter Property="Opacity" Value="1.0"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedIn">
+                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                <Setter Property="Opacity" Value="1.0"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <Button x:Name="btnRowCancel" Click="BtnCancel_Click" CommandParameter="{Binding}" Content="✕" ToolTip="Cancel Reservation" Margin="0">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                        <Setter Property="Background" Value="#E74C3C"/>
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                        <Setter Property="Opacity" Value="1.0"/>
+                                                        <Style.Triggers>
+                                                            <!-- Nếu đã Confirm thì mờ đi và không cho bấm -->
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Confirmed">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.3"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedIn">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.3"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="CheckedOut">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.3"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding BookingStatus}" Value="Cancelled">
+                                                                <Setter Property="Background" Value="#444A73"/>
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                                <Setter Property="Opacity" Value="0.3"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
