@@ -1,0 +1,137 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.ServiceBillWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_FPT_ManagementHotel"
+        mc:Ignorable="d"
+        Title="Order Room Services" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" Background="#1E2030">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- 1. Header Tiêu đề -->
+            <RowDefinition Height="*"/>
+            <!-- 2. Bảng Danh sách Dịch vụ -->
+            <RowDefinition Height="Auto"/>
+            <!-- 3. Nút Đóng / Hoàn tất -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. HEADER SECTION -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- Thanh Gold Accent bên trái tiêu đề -->
+                <Border Width="4" Height="36" Background="#F1C40F" CornerRadius="2" Margin="0,0,12,0"/>
+                <StackPanel>
+                    <TextBlock x:Name="txtTitle" Text="ORDER ROOM SERVICES" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF"/>
+                    <TextBlock x:Name="txtSubtitle" Text="Select available services and enter quantity for the current room" FontSize="12" Foreground="#A0A5C1" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- 2. MAIN SERVICES DATA GRID -->
+        <Border Grid.Row="1" Background="#25283D" CornerRadius="10" Padding="15" BorderBrush="#444A73" BorderThickness="1">
+            <DataGrid x:Name="dgServices" 
+                      AutoGenerateColumns="False" 
+                      CanUserAddRows="False"
+                      Background="Transparent" 
+                      BorderThickness="0"
+                      GridLinesVisibility="Horizontal" 
+                      RowBackground="#2F334D" 
+                      AlternatingRowBackground="#25283D" 
+                      Foreground="#FFFFFF" 
+                      BorderBrush="#444A73"
+                      HorizontalGridLinesBrush="#1E2030"
+                      RowHeight="38"
+                      VerticalContentAlignment="Center"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#444A73"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Padding" Value="10,5"/>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <!-- Tên dịch vụ -->
+                    <DataGridTextColumn Header="Service Name" Binding="{Binding ServiceName}" Width="*" IsReadOnly="True"/>
+
+                    <!-- Giá dịch vụ -->
+                    <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat=\{0:N0\} VND}" Width="130" IsReadOnly="True" Foreground="#F39C12" FontWeight="Bold"/>
+
+                    <!-- Ô nhập Số lượng -->
+                    <DataGridTemplateColumn Header="Quantity" Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox x:Name="txtQuantity" 
+                                         Text="1" 
+                                         Width="50" 
+                                         Height="24"
+                                         HorizontalAlignment="Center" 
+                                         VerticalContentAlignment="Center" 
+                                         HorizontalContentAlignment="Center"
+                                         Background="#1E2030"
+                                         Foreground="White"
+                                         BorderBrush="#444A73"
+                                         BorderThickness="1"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Nút hành động Add -->
+                    <DataGridTemplateColumn Header="Action" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Add" Click="BtnAddService_Click" CommandParameter="{Binding}"
+                                        Width="70" Height="26" Foreground="White" FontSize="11" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#2ECC71"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#27AE60"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="4">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- 3. FOOTER ACTIONS -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button x:Name="btnClose" Click="BtnClose_Click" Content="Close" Width="100" Height="35" Background="#E74C3C" Foreground="White" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

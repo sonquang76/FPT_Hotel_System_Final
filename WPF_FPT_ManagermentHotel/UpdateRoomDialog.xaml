@@ -1,0 +1,149 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.UpdateRoomDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Update Room"
+        Height="900" Width="600"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="#1E2030"
+        FontFamily="Segoe UI, Helvetica, Arial, sans-serif">
+    <Window.Resources>
+        <!-- Style Nhãn (Label) -->
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="4,0,0,8"/>
+        </Style>
+        <!-- Style TextBox tĩnh (Đơn giản, sạch sẽ) -->
+        <Style TargetType="TextBox" x:Key="ModernTextBox">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Background" Value="#2F334D"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="15,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Nút Update (Primary tĩnh) -->
+        <Style TargetType="Button" x:Key="ModernButton">
+            <Setter Property="Background" Value="#2ECC71"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#2ECC71" BlurRadius="12" Opacity="0.3" ShadowDepth="0" Direction="0"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Nút Cancel (Ghost tĩnh) -->
+        <Style TargetType="Button" x:Key="GhostButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <!-- Khung Form (Card UI) -->
+        <Border Background="#25283D" CornerRadius="16" Margin="30" Padding="35,40" VerticalAlignment="Center">
+            <!-- Đổ bóng 3D nổi bật -->
+            <Border.Effect>
+                <DropShadowEffect Color="#0A0B12" BlurRadius="30" Opacity="0.5" ShadowDepth="8" Direction="270"/>
+            </Border.Effect>
+            <StackPanel>
+                <!-- Tiêu Đề và Biểu tượng Edit -->
+                <StackPanel HorizontalAlignment="Center" Margin="0,0,0,35">
+                    <!-- Tôi dùng màu xanh dương mượt mà cho icon Edit để khác với Add -->
+                    <Border Width="65" Height="65" Background="#3498DB" CornerRadius="35" Margin="0,0,0,15" HorizontalAlignment="Center">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#3498DB" BlurRadius="15" Opacity="0.4" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <TextBlock Text="🛠️" FontSize="30" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="UPDATE ROOM" FontSize="22" FontWeight="Black" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <!-- Số Phòng (Room Number) -->
+                <TextBlock Text="ROOM NUMBER" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="txtRoomNumber" Style="{StaticResource ModernTextBox}" Margin="0,0,0,20"/>
+                <!-- Loại Phòng (Room Type) -->
+                <TextBlock Text="ROOM TYPE" Style="{StaticResource LabelStyle}"/>
+                <Border Background="#2F334D" BorderBrush="#444A73" BorderThickness="1.5" CornerRadius="8" Height="48" Margin="0,0,0,20">
+                    <ComboBox x:Name="cbRoomType" FontSize="15" Foreground="Black"
+                              Background="Transparent" BorderThickness="0"
+                              DisplayMemberPath="TypeName" SelectedValuePath="RoomTypeId"
+                              VerticalContentAlignment="Center" Padding="15,0"/>
+                </Border>
+                <!-- Tầng (Floor) -->
+                <TextBlock Text="FLOOR" Style="{StaticResource LabelStyle}"/>
+                <TextBox x:Name="txtFloor" Style="{StaticResource ModernTextBox}" Margin="0,0,0,20"/>
+                <!-- Trạng Thái (Status) -->
+                <TextBlock Text="STATUS" Style="{StaticResource LabelStyle}"/>
+                <Border Background="#2F334D" BorderBrush="#444A73" BorderThickness="1.5" CornerRadius="8" Height="48" Margin="0,0,0,35">
+                    <ComboBox x:Name="cbStatus" FontSize="15" Foreground="Black"
+                              Background="Transparent" BorderThickness="0"
+                              VerticalContentAlignment="Center" Padding="15,0">
+                        <ComboBoxItem Content="Available"/>
+                        
+                        <ComboBoxItem Content="Maintenance"/>
+                    </ComboBox>
+                </Border>
+                <!-- Hai Nút Hành Động -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <!-- Khoảng trống -->
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Content="UPDATE" Grid.Column="0"
+                            Style="{StaticResource ModernButton}" 
+                            Click="btnUpdate_Click"/>
+                    <Button Content="CANCEL" Grid.Column="2"
+                            Style="{StaticResource GhostButton}" 
+                            Click="btnCancel_Click"/>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
