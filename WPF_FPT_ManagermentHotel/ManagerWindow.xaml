@@ -1,0 +1,115 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.ManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_FPT_ManagementHotel"
+        mc:Ignorable="d"
+        Title="ManagerWindow" Height="750" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="#1E2030"
+        FontFamily="Segoe UI, Helvetica, Arial, sans-serif">
+    <Window.Resources>
+        <!-- Style Tĩnh cho các Nút Dashboard (Không hiệu ứng chuyển màu) -->
+        <Style TargetType="Button" x:Key="DashboardCardButton">
+            <Setter Property="Background" Value="#25283D"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="Width" Value="240"/>
+            <Setter Property="Height" Value="180"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="16">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#0A0B12" BlurRadius="25" Opacity="0.5" ShadowDepth="8" Direction="270"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <!-- Thanh Header -->
+            <RowDefinition Height="*"/>
+            <!-- Nội dung Dashboard chính -->
+        </Grid.RowDefinitions>
+        <!-- 1. THANH HEADER -->
+        <Grid Grid.Row="0" Background="#25283D">
+            <Grid.Effect>
+                <DropShadowEffect Color="#0A0B12" BlurRadius="20" Opacity="0.4" ShadowDepth="5" Direction="270"/>
+            </Grid.Effect>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!-- App Logo / Branding -->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="30,0">
+                <TextBlock Text="FPT" FontWeight="Black" FontSize="22" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                <TextBlock Text="MANAGER" FontWeight="Bold" FontSize="22" Foreground="#3498DB" VerticalAlignment="Center" Margin="6,0,0,0"/>
+            </StackPanel>
+            <!-- Menu Phải (Đăng xuất được giữ lại trên Header) -->
+            <Menu Grid.Column="2" Background="Transparent" Margin="0,0,25,0" VerticalAlignment="Center">
+                <MenuItem Header="LogOut" Name="btnLogout" Click="btnLogout_Click" Padding="15,10" FontWeight="Bold" Foreground="#E74C3C" FontSize="15"/>
+            </Menu>
+        </Grid>
+        <!-- 2. KHU VỰC CÁC NÚT TÍNH NĂNG (DASHBOARD CARDS) -->
+        <Grid Grid.Row="1">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-40,0,0">
+
+                <TextBlock Text="MANAGER DASHBOARD" FontSize="32" FontWeight="Black" Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <TextBlock Text="Select a module below to manage your hotel system" FontSize="16" Foreground="#A0A5C1" HorizontalAlignment="Center" Margin="0,0,0,50"/>
+
+                <!-- WrapPanel giúp các nút tự động xuống dòng và căn giữa mượt mà -->
+                <WrapPanel HorizontalAlignment="Center" MaxWidth="850">
+
+                    <!-- Nút 1: Profile -->
+                    <Button Click="ManageProfile_Click" Style="{StaticResource DashboardCardButton}">
+                        <StackPanel>
+                            <TextBlock Text="👤" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Manage Profile" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Nút 2: Customers -->
+                    <Button Click="ManageCustomers_Click" Style="{StaticResource DashboardCardButton}">
+                        <StackPanel>
+                            <TextBlock Text="👥" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Manage Customers" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <!-- Nút 3: Rooms -->
+                    <Button Click="ManageRooms_Click" Style="{StaticResource DashboardCardButton}">
+                        <StackPanel>
+                            <TextBlock Text="🛏️" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Manage Rooms" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <!-- Nút 4: Room Types -->
+                    <Button Click="ManageRoomType_Click" Style="{StaticResource DashboardCardButton}">
+                        <StackPanel>
+                            <TextBlock Text="🏷️" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Room Types" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <!-- Nút 5: Reports -->
+                    <!-- Lưu ý: Giữ lại Name="btnReport" như bạn đã đặt trong mã cũ -->
+                    <Button x:Name="btnReport" Click="btnReport_Click" Style="{StaticResource DashboardCardButton}">
+                        <StackPanel>
+                            <TextBlock Text="📊" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="View Reports" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>

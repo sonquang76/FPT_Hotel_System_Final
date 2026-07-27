@@ -1,0 +1,194 @@
+﻿<Window x:Class="WPF_FPT_ManagementHotel.PaymentOnlineWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Online Payment"
+        Height="1000" Width="1100"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="#1E2030"
+        FontFamily="Segoe UI, Helvetica, Arial, sans-serif">
+    <Window.Resources>
+        <!-- Style Nhãn (Label) -->
+        <Style TargetType="TextBlock" x:Key="LabelStyle">
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <!-- Style Giá trị tĩnh (Value) -->
+        <Style TargetType="TextBlock" x:Key="ValueStyle">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <!-- Style Button Primary tĩnh -->
+        <Style TargetType="Button" x:Key="ModernButton">
+            <Setter Property="Background" Value="#2ECC71"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#2ECC71" BlurRadius="12" Opacity="0.4" ShadowDepth="0" Direction="0"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Style Button Ghost tĩnh -->
+        <Style TargetType="Button" x:Key="GhostButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A0A5C1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#444A73"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- HEADER TITLE -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,25">
+            <Border Width="45" Height="45" Background="#F39C12" CornerRadius="8" Margin="0,0,15,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#F39C12" BlurRadius="15" Opacity="0.4" ShadowDepth="0"/>
+                </Border.Effect>
+                <TextBlock Text="💳" FontSize="20" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <TextBlock Text="ONLINE PAYMENT" FontSize="26" FontWeight="Black" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+        </StackPanel>
+        <!-- MAIN CARD -->
+        <Border Grid.Row="1" Background="#25283D" CornerRadius="16" Padding="35">
+            <Border.Effect>
+                <DropShadowEffect Color="#0A0B12" BlurRadius="30" Opacity="0.5" ShadowDepth="8" Direction="270"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="40"/>
+                    <!-- Spacing -->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- ================= LEFT COLUMN ================= -->
+                <StackPanel Grid.Column="0">
+
+                    <!-- Hình ảnh minh họa -->
+                    <Border CornerRadius="12" Background="#1E2030" Height="220" Margin="0,0,0,20">
+                        <Border CornerRadius="12" ClipToBounds="True">
+                            <Image x:Name="imgRoom" Stretch="UniformToFill" Source="/Images/room.png"/>
+                        </Border>
+                    </Border>
+                    <TextBlock Text="ROOM PREVIEW" FontSize="16" FontWeight="Black" Foreground="#FFFFFF" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                    <Border Height="1" Background="#353A56" Margin="0,0,0,20"/>
+                    <TextBlock Text="HOTEL POLICY" FontSize="16" FontWeight="Black" Foreground="#F39C12" Margin="0,0,0,10"/>
+                    <TextBlock TextWrapping="Wrap" Foreground="#A0A5C1" FontSize="14" LineHeight="24">
+                        • Online payment requires a 30% deposit.<LineBreak/>
+                        • The remaining amount will be paid at check-in.<LineBreak/>
+                        • Free cancellation before the hotel's cancellation deadline.
+                    </TextBlock>
+                </StackPanel>
+                <!-- ================= RIGHT COLUMN ================= -->
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0">
+                        <!-- THÔNG TIN ĐẶT PHÒNG -->
+                        <TextBlock Text="BOOKING INFORMATION" FontSize="18" FontWeight="Black" Foreground="#FFFFFF" Margin="0,0,0,20"/>
+                        <Grid Margin="0,0,0,25">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ROOM NUMBER:" Style="{StaticResource LabelStyle}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="txtRoomNumber" Style="{StaticResource ValueStyle}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="ROOM TYPE:" Style="{StaticResource LabelStyle}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="txtRoomType" Style="{StaticResource ValueStyle}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="FLOOR:" Style="{StaticResource LabelStyle}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="txtFloor" Style="{StaticResource ValueStyle}"/>
+                            <!-- DatePickers -->
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="CHECK IN:" Style="{StaticResource LabelStyle}"/>
+                            <Border Grid.Row="3" Grid.Column="1" Background="#1E2030" BorderBrush="#444A73" BorderThickness="1.5" CornerRadius="8" Height="40" Margin="0,0,0,10" VerticalAlignment="Center">
+                                <DatePicker x:Name="dpCheckIn" Foreground="Black" Background="Transparent" BorderThickness="0" SelectedDateChanged="DateChanged"/>
+                            </Border>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="CHECK OUT:" Style="{StaticResource LabelStyle}"/>
+                            <Border Grid.Row="4" Grid.Column="1" Background="#1E2030" BorderBrush="#444A73" BorderThickness="1.5" CornerRadius="8" Height="40" Margin="0,0,0,10" VerticalAlignment="Center">
+                                <DatePicker x:Name="dpCheckOut" Foreground="Black" Background="Transparent" BorderThickness="0" SelectedDateChanged="DateChanged"/>
+                            </Border>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="NUMBER OF NIGHTS:" Style="{StaticResource LabelStyle}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" x:Name="txtNight" Style="{StaticResource ValueStyle}"/>
+                        </Grid>
+                        <!-- TỔNG KẾT THANH TOÁN (PAYMENT SUMMARY) -->
+                        <Border Background="#1E2030" BorderBrush="#353A56" BorderThickness="1" CornerRadius="12" Padding="25">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="45"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="PRICE / NIGHT:" Style="{StaticResource LabelStyle}"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="txtPrice" Style="{StaticResource ValueStyle}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="DEPOSIT (30%):" Style="{StaticResource LabelStyle}"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="txtDeposit" Style="{StaticResource ValueStyle}" Foreground="#3498DB"/>
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="PAYMENT METHOD:" Style="{StaticResource LabelStyle}"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" x:Name="txtMethod" Style="{StaticResource ValueStyle}" Text="Online"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="PAYMENT STATUS:" Style="{StaticResource LabelStyle}"/>
+                                <Border Grid.Row="3" Grid.Column="1" Width="100" Height="28" CornerRadius="6" Background="#F39C12" HorizontalAlignment="Left">
+                                    <TextBlock x:Name="txtStatus" Text="Pending" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" FontSize="13"/>
+                                </Border>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="TOTAL PAYMENT:" Style="{StaticResource LabelStyle}" Foreground="#FFFFFF" FontWeight="Bold"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1" x:Name="txtTotal" Style="{StaticResource ValueStyle}" Foreground="#E74C3C" FontSize="22"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                    <!-- BUTTONS -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                        <Button x:Name="btnPay" Width="180" Content="💳 PAY NOW" Style="{StaticResource ModernButton}" Margin="0,0,15,0" Click="btnPay_Click"/>
+                        <Button x:Name="btnCancel" Width="120" Content="CANCEL" Style="{StaticResource GhostButton}" Click="btnCancel_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
